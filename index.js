@@ -1,47 +1,75 @@
-const cart = ['shoes', 'kurta', 'pajama'];
+const appDiv1 = document.getElementById('app');
+const appDiv2 = document.getElementById('country');
+const appDiv3 = document.getElementById('state');
+const appDiv4 = document.getElementById('city');
 
-const promise = createOrder(cart);
-console.log(promise);
+appDiv1.innerHTML = `<h1>JS Promises at Devfest 2022</h1>`;
+
+const country = 'India';
+
+const promise = getCountryCode(country);
 
 promise
-  .then(function (orderId) {
-    console.log(orderId);
-    // proceedToPayment(orderId);
+  .then((countryCode) => {
+    return countryCode;
   })
-  .then(function () {
-    proceedToPayment(orderId);
+  .then((countryCode) => {
+    appDiv2.innerHTML = `<h3>Country </h3> ${countryCode} `;
+    return getState(countryCode);
   })
-  .then(function (paymentInfo) {
-    console.log(paymentInfo);
+  .then((state) => {
+    appDiv3.innerHTML = `<h3>State </h3> ${state} `;
+    return getCity(state);
+  })
+  .then((city) => {
+    appDiv4.innerHTML = `<h3>City </h3> ${city} `;
   })
   .catch(function (err) {
     console.log(err);
+  })
+  .finally((res) => {
+    console.log('I will always run no matter what');
   });
 
-function createOrder(cart) {
+function getCountryCode(country) {
   const pr = new Promise((resolve, reject) => {
-    //createOrde
-    //validateCart
-    //orderId
-    if (!validateCart(cart)) {
-      const err = new Error('Cart is emplty');
+    if (!validateResponse(country)) {
+      const err = new Error('Cannot fetch country');
       reject(err);
     }
-    const orderId = '12345';
-    if (orderId) {
-      resolve(orderId);
+    const countryCode = 'INDIA';
+    if (countryCode) {
+      resolve(countryCode);
     }
   });
   return pr;
 }
 
-function proceedToPayment(orderId) {
-  //proceedToPayment
-  return new Promise((resolve, reject) => {
-    resolve('payment successfull');
+function getState(countryCode) {
+  const pr = new Promise((resolve, reject) => {
+    if (countryCode) {
+      resolve('UP');
+    } else {
+      const err = 'Cannot fetch State';
+      reject(err);
+    }
   });
+  return pr;
 }
 
-function validateCart(cart) {
-  return false;
+function getCity(state) {
+  const pr = new Promise((resolve, reject) => {
+    if (state) {
+      resolve('Noida');
+    } else {
+      const err = 'Cannot fetch city';
+      reject(err);
+    }
+  });
+
+  return pr;
+}
+
+function validateResponse(country) {
+  return true;
 }
